@@ -5,7 +5,6 @@ const chai = require('chai');
 chai.expect();
 
 function loadTemplate(filepath, onLoad) {
-    jsdom.JSDOM.fromFile
     const filePath = path.join(__dirname, filepath);
     fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
         if (!err) {
@@ -27,7 +26,16 @@ describe("the game", function(){
 
    it('loads the markup', function(){
        expect(
-           document.getElementById('start--button'))
+           document.getElementsByClassName('btnStart'))
            .not.toBeNull();
    });
+    it('btnStart hide when is clicked', function(){
+        let botonStart = document.getElementById('antonio');
+        console.log(botonStart.classList.toggle('invisible'));
+        botonStart.click();
+
+        expect(
+            botonStart.classList.contains('invisible'))
+            .toBeTruthy();
+    });
 });
