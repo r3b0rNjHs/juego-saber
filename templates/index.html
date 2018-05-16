@@ -1,12 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>SABER Y GANAR</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <!-- todo: include body.html template here -->
-    <script src="script/main.js"></script>
-    <script>application().start()</script>
+<header class="header">
+    <h1>Saber y ganar</h1>
+    <p>Acierta lo más rápido que puedas</p>
+</header>
+<main class="main">
+    <div class="game">
+        <h3>Preguntas</h3>
+        <div class="questions">
+
+        </div>
+        <div class="message">
+
+        </div>
+        <button class="btnStart" id="buttonStart">EMPEZAR</button>
+        <button class="btn invisible">¡Dale!</button>
+        <!-- <button class="btnNext">Siguiente pregunta</button> -->
+    </div>
+    <div class="scores"><h3>Marcadores</h3>
+        <div class="nameBox invisible">
+            <label for="inputNameId" class="introduce"></label>
+            <input type="text" id="inputNameId" name="inputName" placeholder="Escribe tu nombre">
+            <button class="btnSave">Guardar</button>
+        </div>
+        <ul class="list">
+
+        </ul>
+    </div>
+
+
+    <div class="stadistics"><h3>Estadísticas</h3>
+        <div class="speed">Velocidad promedio respondiendo:<div class="speedSeconds"></div></div>
+        <div class="corrects">Preguntas acertadas:<div class="correctNumber"></div></div>
+        <div class="incorrects">Preguntas falladas:<div class="incorrectNumber"></div></div>
+
+    </div>
+
+    <div class="bonus">
+        <div class="time">Tiempo: <div class="seconds"></div></div>
+        <div class="realPoints">Puntos: <div class="scoreUI"></div></div>
+    </div>
+</main>
+<script src="../src/main.js"></script>
+<script>start()</script>
 </body>
+
 </html>

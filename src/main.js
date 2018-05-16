@@ -1,4 +1,4 @@
-function application() {
+function start() {
     'use strict';
 
     const poolOfQuestions = [{

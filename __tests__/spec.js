@@ -18,7 +18,7 @@ function loadTemplate(filepath, onLoad) {
 describe("the game", function(){
 
    beforeEach(function(done){
-       loadTemplate('../templates/body.html', function(text){
+       loadTemplate('../templates/index.html', function(text){
            document.body.innerHTML = text;
            done();
        });
@@ -30,12 +30,12 @@ describe("the game", function(){
            .not.toBeNull();
    });
     it('btnStart hide when is clicked', function(){
-        let botonStart = document.getElementById('antonio');
-        console.log(botonStart.classList.toggle('invisible'));
-        botonStart.click();
+        let buttonStart = document.getElementById('buttonStart');
+        console.log(buttonStart.classList.toggle('invisible'));
+        buttonStart.click();
 
         expect(
-            botonStart.classList.contains('invisible'))
+            buttonStart.classList.contains('invisible'))
             .toBeTruthy();
     });
 });
