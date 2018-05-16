@@ -1,0 +1,58 @@
+* {
+	box-sizing: border-box;
+}
+body{
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	font-family: sans-serif;
+    min-height: 100vh;
+}
+.header {
+    text-align: center;
+}
+.main {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr
+
+}
+.btn,
+.btnNext {
+    margin-top: 15px;
+}
+.list {
+    margin-top: 25px;
+    list-style:none;
+    text-align: left;
+}
+.checkboxBox {
+    margin-top: 5px;
+
+}
+.questionBox {
+    margin-bottom: 10px;
+}
+.actualPoints {
+    display: inline;
+}
+.invisible {
+    display: none;
+}
+.time,
+.seconds, 
+.scoreUI {
+    display:inline;
+    text-align: left;
+}
+.bonus {
+    margin-left: 20px;
+    display:inline;
+    text-align: left;
+}
+.speed,
+.corrects,
+.incorrects {
+    text-align: left;
+    margin-left:15%;
+}
