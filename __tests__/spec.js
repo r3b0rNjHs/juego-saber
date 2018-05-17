@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const chai = require('chai');
-const start = require('../src/main');
+const application = require('../src/main');
 chai.expect();
 
 function loadTemplate(filepath, onLoad) {
@@ -16,51 +16,30 @@ function loadTemplate(filepath, onLoad) {
 }
 
 describe("the game", function(){
-
+   var app;
    beforeEach(function(done){
        loadTemplate('../views/body.html', function(text){
            document.body.innerHTML = text;
+           app = application();
+           app.start();
            done();
        });
    });
 
    it('loads the markup', function(){
        expect(
-           document.getElementsByClassName('btnStart'))
+           document.getElementById('start--button'))
            .not.toBeNull();
    });
-    it('should hide btnStart when is clicked', function(){
-        let buttonStart = document.getElementById('buttonStart');
-        console.log(buttonStart.classList.toggle('invisible'));
-        buttonStart.click();
 
-
-        expect(
-            buttonStart.classList.contains('invisible'))
-            .toBeTruthy();
-    });
-    it('should update score', function () {
-        let seconds = 1;
-        expect(start().updateScoreIfIsCorrect(seconds)).toBe(2);
-    });
-    it('should press start button', function (done) {
-        let buttonStart = document.getElementById('buttonStart');
-        console.log(buttonStart.classList.toggle('invisible'));
-        buttonStart.click();
-        let questionsBox = document.getElementById('questions');
-        var config = { attributes: true, childList: true };
-        var callback = function(mutationsList) {
-            let answer = document.getElementById('3');
-            answer.click();
-            let dale = document.getElementById('btn');
-            dale.click();
-            let score = document.getElementById('scoreUI');
-            expect(score.innerText).toBe('2');
-            done();
-        };
-        var observer = new MutationObserver(callback);
-        observer.observe(questionsBox, config);
-        observer.disconnect();
-
-    });
+   it('answers a question', function () {
+       let buttonStart = document.getElementById('start--button');
+       buttonStart.click();
+       let firstAnswer = document.getElementsByTagName('input')[0];
+       firstAnswer.click();
+       let nextQuestionButton = document.getElementById('next--question--button');
+       nextQuestionButton.click();
+       // TODO: expect
+       expect(1).toEqual(1);
+   });
 });

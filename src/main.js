@@ -1,248 +1,160 @@
-function start() {
-    'use strict';
+function application() {
 
-    const poolOfQuestions = [{
-        id: 1,
-        question: "¿Cuál es la capital de Portugal?",
-        answers: [
-            {id: 0, answer: "Faro", isCorrect: false, idQuestion: 1},
-            {id: 1, answer: "Oporto", isCorrect: false, idQuestion: 1},
-            {id: 2, answer: "Lisboa", isCorrect: true, idQuestion: 1}
-        ]
-    },
-        {
-            id: 2,
-            question: "¿Cuál es la capital de Egipto?",
-            answers: [
-                {id: 0, answer: "Faro", isCorrect: false, idQuestion: 2},
-                {id: 1, answer: "El Cairo", isCorrect: true, idQuestion: 2},
-                {id: 2, answer: "Lisboa", isCorrect: false, idQuestion: 2}
-            ]
-        },
-        {
-            id: 3,
-            question: "¿Cuál es la capital de Zambia?",
-            answers: [
-                {id: 0, answer: "Lusaka", isCorrect: true, idQuestion: 3},
-                {id: 1, answer: "Oporto", isCorrect: false, idQuestion: 3},
-                {id: 2, answer: "Lisboa", isCorrect: false, idQuestion: 3}
-            ]
-        },
-        {
-            id: 4,
-            question: "¿Cuál es la capital de Jordania?",
-            answers: [
-                {id: 0, answer: "Madrid", isCorrect: false, idQuestion: 4},
-                {id: 1, answer: "Amán", isCorrect: true, idQuestion: 4},
-                {id: 2, answer: "Lisboa", isCorrect: false, idQuestion: 4}
-            ]
-        },
-        {
-            id: 5,
-            question: "¿Cuál es la capital de Panama?",
-            answers: [
-                {id: 0, answer: "Madrid", isCorrect: false, idQuestion: 5},
-                {id: 1, answer: "Oporto", isCorrect: false, idQuestion: 5},
-                {id: 2, answer: "Ciudad de Panamá", isCorrect: true, idQuestion: 5}
-            ]
-        }];
-
-    const boxQuestions = document.querySelector('.questions');
-    const btnSend = document.querySelector('.btn');
-    const btnStart = document.querySelector('.btnStart');
-    const btnSave = document.querySelector('.btnSave');
-    let msg = document.querySelector('.message');
-    let timer = document.querySelector('.seconds');
-    let nameBox = document.querySelector('.nameBox');
-    let scoreUI = document.querySelector('.scoreUI');
-    let totalPoints = 0;
-    let seconds = 0;
-    let i = 0;
-    let sumPoints;
-    let listNames;
-    let found;
-    let answerSelected;
-    let actualTime;
-    btnSend.disabled = true;
+    var questions = [];
+    var startButton;
+    var questionsContainer;
+    var nextQuestionButton;
+    var questionTitle;
+    var questionAnswers;
+    var radioAnswersList;
+    var questionsIndex = 0;
+    var timerId;
+    var countdown;
 
 
-    btnStart.addEventListener('click', onStart);
-
-    function onStart() {
-        btnStart.classList.toggle('invisible');
-        btnSend.classList.toggle('invisible');
-        boxQuestions.classList.remove('invisible');
-        i = 0;
-        displayQuestions(poolOfQuestions);
-        actualTime = setInterval(refreshQuestionTimer, 1000);
-    }
-
-
-    function displayQuestions() {
-        if (i < poolOfQuestions.length) {
-            boxQuestions.innerHTML =
-                `<div class="questionBox" id="${poolOfQuestions[i].id}">${poolOfQuestions[i].question}</div>`;
-            for (let x = 0; x < poolOfQuestions[i].answers.length; x++) {
-                boxQuestions.innerHTML +=
-                    `<div class="checkboxBox">
-                        <input type="radio" id="${poolOfQuestions[i].answers[x].id}" name="options" class="answer" value="${poolOfQuestions[i].answers[x].answer}"/>
-                        <label for="${poolOfQuestions[i].answers[x].id}">${poolOfQuestions[i].answers[x].answer}</label>
-                    </div>`;
-            }
-            i++;
-            msg.innerHTML = '';
-        } else {
-            nameBox.classList.toggle('invisible');
-            btnSend.disabled = true;
-            stopTimer();
-        }
-    }
-
-
-    function refreshQuestionTimer() {
-        seconds++;
-        timer.innerHTML = `${seconds}`;
-        let timeLimitPerQuestion = 20;
-        let pointsToBeDecrease = 3;
-        if (seconds === timeLimitPerQuestion) {
-            seconds = 0;
-            displayQuestions();
-            totalPoints -= pointsToBeDecrease;
-            console.log(totalPoints);
-            printScoreUIRealTime();
-        }
-        enableButtonWhenAnswerSelected();
-    }
-
-    function enableButtonWhenAnswerSelected() {
-        btnSend.disabled = true;
-        const allAnswers = document.querySelectorAll('.answer');
-        for (let i = 0; i < allAnswers.length; i++) {
-            if (allAnswers[i].checked) {
-                btnSend.disabled = false;
-            }
-        }
-    }
-
-    btnSend.addEventListener('click', readUserAnswer);
-    btnSend.addEventListener('click', displayQuestions);
-
-    function readUserAnswer() {
-        const allAnswers = document.querySelectorAll('.answer');
-
-        for (let i = 0; i < allAnswers.length; i++) {
-            if (allAnswers[i].checked) {
-                answerSelected = allAnswers[i];
-            }
-        }
-        found = poolOfQuestions.find(function (question) {
-            const questionBox = document.querySelector('.questionBox');
-            if (question.id === parseInt(questionBox.id)) {
-                return question;
-            }
+    function start(){
+        startButton = document.querySelector('.start--button');
+        startButton.addEventListener('click', onStartGame);
+        questionsContainer = document.querySelector('.questions__container');
+        questionTitle = document.querySelector('.question--title');
+        questionAnswers = document.querySelectorAll('.question--answer');
+        radioAnswersList = document.querySelectorAll('.input-radio');
+        nextQuestionButton = document.getElementById('next--question--button');
+        nextQuestionButton.addEventListener('click', onNextQuestion);
+        getQuestions(function (data) {
+            questions = data;
         });
-        let pickedAnswer = found.answers[answerSelected.id];
-        checkAnswerCorrectOrIncorrect(pickedAnswer);
     }
 
-    function printMessage(message) {
-        msg.innerHTML = `<h3> ${message} </h3>`;
+    function onStartGame(){
+        resetCountdown();
+        startTimer();
+        loadNextQuestion();
     }
-
-    function updateScoreIfIsIncorrect() {
-        if (seconds <= 10) totalPoints -= 1;
-        else totalPoints -= 2;
+    function onNextQuestion(){
+        loadNextQuestion();
     }
-
-    function updateScoreIfIsCorrect(seconds) {
-        if (seconds <= 2) return totalPoints += 2;
-        else if (seconds <= 10) return totalPoints += 1;
-    }
-
-    function checkAnswerCorrectOrIncorrect(pickedAnswer) {
-        if (pickedAnswer.isCorrect) {
-            printMessage("¡Correcta!");
-            updateScoreIfIsCorrect(seconds);
+    function loadNextQuestion() {
+        goToNextQuestion();
+        resetCountdown();
+        if (isNotTheEndOfTheGame()) {
+            renderQuestion(currentQuestion());
         }
         else {
-            printMessage("¡Incorrecto!");
-            updateScoreIfIsIncorrect();
+            gameOver();
         }
-        printScoreUIRealTime();
-        seconds = 0;
     }
-
-
-    function printScoreUIRealTime() {
-        scoreUI.innerHTML = ` ${totalPoints} puntos`
-    }
-
-
-    btnSave.addEventListener('click', onSave);
-
-    function onSave() {
-        saveScoreAndName();
-        printScoreAndName();
-        resetTimeAndPoints();
-        hideButtonsAndBoxes();
-    }
-
-    let score = {
-        names:
-            [],
-        points:
-            []
-    };
-
-    function saveScoreAndName() {
-        let name = document.querySelector('#inputNameId').value;
-        score.names.push(name);
-        listNames = score.names;
-        console.log(listNames);
-        score.points.push(totalPoints);
-        sumPoints = score.points;
-        console.log(sumPoints);
-    }
-
-    function printScoreAndName() {
-        let scoreList = document.querySelector('.list');
-        let add = '';
-        for (let i = 0; i < listNames.length; i++) {
-            add +=
-                `<li class="eachBoxPlayer">${listNames[i]}-
-                <div class="actualPoints">${sumPoints[i]}puntos</div>
-            </li>`;
-        }
-        scoreList.innerHTML = add;
-    }
-
-    function stopTimer() {
-        seconds = 0;
-        clearInterval(actualTime);
-    }
-
-    function resetTimeAndPoints() {
-        totalPoints = 0;
-        printScoreUIRealTime();
+    function gameOver(){
+        hideContainerPanel();
         stopTimer();
-        timer.innerHTML = '';
+        resetQuestions();
+    }
+    function isNotTheEndOfTheGame(){
+        return questionsIndex < questions.length;
+    }
+    function resetQuestions(){
+        questionsIndex = 0;
+    }
+    function goToNextQuestion(){
+        questionsIndex++;
+    }
+    function currentQuestion() {
+        return questions[questionsIndex];
+    }
+    function startTimer() {
+        timerId = setInterval(function(){
+            updateCountdown(onNextQuestion, timeChanged);
+        }, 1000);
+    }
+    function stopTimer(){
+        clearInterval(timerId);
+    }
+    function resetCountdown(){
+        countdown = 10;
+    }
+    function timeChanged() {
+        var clock = document.querySelector('.clock');
+        clock.innerHTML = countdown;
+    }
+    function updateCountdown(onTimeout, onTimeChanged){
+        countdown--;
+        if (countdown > 0) {
+            onTimeChanged();
+        }
+        else if (countdown === 0) {
+            onTimeout();
+        }
     }
 
-    function hideButtonsAndBoxes() {
-        btnStart.classList.toggle('invisible');
-        btnSend.classList.toggle('invisible');
-        boxQuestions.classList.add('invisible');
-        nameBox.classList.add('invisible');
-        msg.innerHTML = '';
+    function getQuestions(callback) {
+
+        var serverData = [
+            {
+                id: 1,
+                title: '¿Cuántos años tiene María?',
+                answers: [
+                    {id: 0, answer: '25'},
+                    {id: 1, answer: '33'},
+                    {id: 2, answer: '37'}
+                ],
+                correctAnswer: {id: 1}
+            },
+            {
+                id: 2,
+                title: '¿Cuál es la capital de Zambia?',
+                answers: [
+                    {id: 0, answer: 'Lusaka'},
+                    {id: 1, answer: 'Harare'},
+                    {id: 2, answer: 'Madrid'}
+                ],
+                correctAnswer: {id: 0}
+            },
+            {
+                id: 3,
+                title: '¿Cuál es el nombre completo de Freud?',
+                answers: [
+                    {id: 0, answer: 'Adolf'},
+                    {id: 1, answer: 'Sefarad'},
+                    {id: 2, answer: 'Sigmund'}
+                ],
+                correctAnswer: {id: 2}
+            },
+            {
+                id: 4,
+                title: '¿Cuál es el animal más rápido del mundo?',
+                answers: [
+                    {id: 0, answer: 'Guepardo'},
+                    {id: 1, answer: 'León'},
+                    {id: 2, answer: 'Tortuga'}
+                ],
+                correctAnswer: {id: 0}
+            }
+        ];
+        callback(serverData);
     }
 
-    return{
-        start,
-        checkAnswerCorrectOrIncorrect,
-        onStart,
-        updateScoreIfIsCorrect,
-        readUserAnswer
+    function renderQuestion(question) {
+        showContainerPanel();
+        questionTitle.innerHTML = (question.title);
+        questionTitle.setAttribute('id', question.id);
+        for (var x = 0; x < question.answers.length; x++) {
+            questionAnswers[x].innerHTML = (question.answers[x].answer);
+            radioAnswersList[x].setAttribute('id', question.answers[x].id);
+        }
+    }
+    function showContainerPanel(){
+        questionsContainer.classList.remove('hidden');
+    }
+    function hideContainerPanel() {
+        questionsContainer.classList.toggle('hidden');
     }
 
+    return {
+        start: start
+    }
 }
-module.exports = start;
+
+// be able to import the file in node
+if (typeof(module) != 'undefined'){
+    module.exports = application;
+}
