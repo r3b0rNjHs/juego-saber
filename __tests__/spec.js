@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const jsdom = require('jsdom');
 const chai = require('chai');
 const start = require('../src/main');
 chai.expect();
@@ -17,10 +16,9 @@ function loadTemplate(filepath, onLoad) {
 }
 
 describe("the game", function(){
-    //let app;
+
    beforeEach(function(done){
-       //app = start();
-       loadTemplate('../templates/index.html', function(text){
+       loadTemplate('../views/body.html', function(text){
            document.body.innerHTML = text;
            done();
        });
@@ -30,6 +28,28 @@ describe("the game", function(){
        expect(
            document.getElementsByClassName('btnStart'))
            .not.toBeNull();
+   });
+   xit('should press start button', function (done) {
+        // This test is not going to work because jsdom does not implement
+        // the MutationObserver object. It would work with a real browser.
+
+        let buttonStart = document.getElementById('buttonStart');
+        console.log(buttonStart.classList.toggle('invisible'));
+        buttonStart.click();
+        let questionsBox = document.getElementById('questions');
+        var config = { attributes: true, childList: true };
+        var callback = function(mutationsList) {
+            let answer = document.getElementById('3');
+            answer.click();
+            let dale = document.getElementById('btn');
+            dale.click();
+            let score = document.getElementById('scoreUI');
+            expect(score.innerText).toBe('2');
+            done();
+        };
+        var observer = new MutationObserver(callback);
+        observer.observe(questionsBox, config);
+        observer.disconnect();
    });
     it('should hide btnStart when is clicked', function(){
         let buttonStart = document.getElementById('buttonStart');
