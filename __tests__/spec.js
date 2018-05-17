@@ -16,7 +16,7 @@ function loadTemplate(filepath, onLoad) {
 }
 
 describe("the game", function(){
-   var app;
+   let app;
    beforeEach(function(done){
        loadTemplate('../views/body.html', function(text){
            document.body.innerHTML = text;

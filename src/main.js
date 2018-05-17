@@ -1,15 +1,15 @@
 function application() {
 
-    var questions = [];
-    var startButton;
-    var questionsContainer;
-    var nextQuestionButton;
-    var questionTitle;
-    var questionAnswers;
-    var radioAnswersList;
-    var questionsIndex = 0;
-    var timerId;
-    var countdown;
+    let questions = [];
+    let startButton;
+    let questionsContainer;
+    let nextQuestionButton;
+    let questionTitle;
+    let questionAnswers;
+    let radioAnswersList;
+    let questionsIndex = 0;
+    let timerId;
+    let countdown;
 
 
     function start(){
@@ -73,7 +73,7 @@ function application() {
         countdown = 10;
     }
     function timeChanged() {
-        var clock = document.querySelector('.clock');
+        let clock = document.querySelector('.clock');
         clock.innerHTML = countdown;
     }
     function updateCountdown(onTimeout, onTimeChanged){
@@ -88,7 +88,7 @@ function application() {
 
     function getQuestions(callback) {
 
-        var serverData = [
+        let serverData = [
             {
                 id: 1,
                 title: '¿Cuántos años tiene María?',
