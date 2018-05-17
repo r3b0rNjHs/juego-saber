@@ -6,6 +6,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "chai": "^4.1.2"
+    "chai": "^4.1.2",
+    "express": "^4.16.3"
   }
 }

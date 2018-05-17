@@ -15,14 +15,14 @@
 <main class="main">
     <div class="game">
         <h3>Preguntas</h3>
-        <div class="questions">
+        <div class="questions" id="questions">
 
         </div>
         <div class="message">
 
         </div>
         <button class="btnStart" id="buttonStart">EMPEZAR</button>
-        <button class="btn invisible">¡Dale!</button>
+        <button class="btn invisible" id="btn">¡Dale!</button>
         <!-- <button class="btnNext">Siguiente pregunta</button> -->
     </div>
     <div class="scores"><h3>Marcadores</h3>
@@ -46,10 +46,11 @@
 
     <div class="bonus">
         <div class="time">Tiempo: <div class="seconds"></div></div>
-        <div class="realPoints">Puntos: <div class="scoreUI"></div></div>
+        <div class="realPoints" id="realPoints">Puntos: <p class="scoreUI" id="scoreUI"></p></div>
     </div>
 </main>
 <script src="../src/main.js"></script>
+<script src="../__tests__/spec.js"></script>
 <script>start()</script>
 </body>
 

@@ -154,15 +154,15 @@ function start() {
         else totalPoints -= 2;
     }
 
-    function updateScoreIfIsCorrect() {
-        if (seconds <= 2) totalPoints += 2;
-        else if (seconds <= 10) totalPoints += 1;
+    function updateScoreIfIsCorrect(seconds) {
+        if (seconds <= 2) return totalPoints += 2;
+        else if (seconds <= 10) return totalPoints += 1;
     }
 
     function checkAnswerCorrectOrIncorrect(pickedAnswer) {
         if (pickedAnswer.isCorrect) {
             printMessage("¡Correcta!");
-            updateScoreIfIsCorrect();
+            updateScoreIfIsCorrect(seconds);
         }
         else {
             printMessage("¡Incorrecto!");
@@ -237,8 +237,12 @@ function start() {
     }
 
     return{
-        displayQuestions,
         start,
-        checkAnswerCorrectOrIncorrect
+        checkAnswerCorrectOrIncorrect,
+        onStart,
+        updateScoreIfIsCorrect,
+        readUserAnswer
     }
+
 }
+module.exports = start;
