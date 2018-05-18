@@ -37,9 +37,11 @@ describe("the game", function(){
        buttonStart.click();
        let firstAnswer = document.getElementsByTagName('input')[0];
        firstAnswer.click();
+       expect(firstAnswer.checked).toBe(true);
        let nextQuestionButton = document.getElementById('next--question--button');
        nextQuestionButton.click();
+       //console.log(firstAnswer.checked);
        // TODO: expect
-       expect(1).toEqual(1);
+
    });
 });
