@@ -3,11 +3,12 @@ function application() {
     let questions = [];
     let startButton;
     let questionsContainer;
+    let serverData = null;
     let nextQuestionButton;
     let questionTitle;
     let questionAnswers;
     let radioAnswersList;
-    let questionsIndex = 0;
+    //let questionsIndex = -1;
     let timerId;
     let countdown;
 
@@ -49,6 +50,9 @@ function application() {
         stopTimer();
         resetQuestions();
     }
+
+    //---------------------------------------------------------
+    let questionsIndex = -1;
     function isNotTheEndOfTheGame(){
         return questionsIndex < questions.length;
     }
@@ -61,10 +65,41 @@ function application() {
     function currentQuestion() {
         return questions[questionsIndex];
     }
+
+    let questionsNavigator = function(questions){
+        let questionsIndex = -1;
+        function isNotTheEndOfTheGame(){
+            return questionsIndex < questions.length;
+        }
+        function resetQuestions(){
+            questionsIndex = 0;
+        }
+        function goToNextQuestion(){
+            questionsIndex++;
+        }
+        function currentQuestion() {
+            if(questionsIndex < 0){
+                return questions[0];
+            }
+            if (questionsIndex >= questions[questionsIndex]){
+
+            }
+            return questions[questionsIndex];
+        }
+        return {
+            isNotTheEndOfTheGame,
+            resetQuestions,
+            goToNextQuestion,
+            currentQuestion
+        }
+    };
+
+    //-----------------------------------------
     function startTimer() {
         timerId = setInterval(function(){
             updateCountdown(onNextQuestion, timeChanged);
         }, 1000);
+        updateCountdown(onNextQuestion, timeChanged);
     }
     function stopTimer(){
         clearInterval(timerId);
@@ -88,7 +123,7 @@ function application() {
 
     function getQuestions(callback) {
 
-        let serverData = [
+        serverData = serverData || [
             {
                 id: 1,
                 title: '¿Cuántos años tiene María?',
@@ -150,11 +185,22 @@ function application() {
     }
 
     return {
-        start: start
+        start,
+        setServerData(data){
+            serverData = data;
+        },
+        questionsNavigator
+
+
+
     }
 }
 
+function moduleDefined() {
+    return typeof(module) !== 'undefined';
+}
+
 // be able to import the file in node
-if (typeof(module) != 'undefined'){
+if (moduleDefined()){
     module.exports = application;
 }
