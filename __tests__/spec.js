@@ -98,7 +98,7 @@ describe("the questions navigator",() => {
         questionNavigator.goToNextQuestion();
         questionNavigator.goToNextQuestion();
         let question = questionNavigator.currentQuestion();
-        expect(questions).toContain(question);
+        expect(questions).not.toContain(question);
     });
 });
 

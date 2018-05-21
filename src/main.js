@@ -81,10 +81,10 @@ function application() {
             if(questionsIndex < 0){
                 return questions[0];
             }
-            if (questionsIndex >= questions[questionsIndex]){
-
+            if (isNotTheEndOfTheGame()){
+                return questions[questionsIndex];
             }
-            return questions[questionsIndex];
+
         }
         return {
             isNotTheEndOfTheGame,
