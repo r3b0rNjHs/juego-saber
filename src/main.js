@@ -82,7 +82,7 @@ function application() {
                 return questions[0];
             }
             if (questionsIndex >= questions.length){
-                return questions[questions.length-1];
+                resetQuestions();
             }
             return questions[questionsIndex];
         }
@@ -172,7 +172,7 @@ function application() {
         showContainerPanel();
         questionTitle.innerHTML = (question.title);
         questionTitle.setAttribute('id', question.id);
-        for (var x = 0; x < question.answers.length; x++) {
+        for (let x = 0; x < question.answers.length; x++) {
             questionAnswers[x].innerHTML = (question.answers[x].answer);
             radioAnswersList[x].setAttribute('id', question.answers[x].id);
         }

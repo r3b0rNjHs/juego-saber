@@ -61,7 +61,6 @@ describe("the questions navigator",() => {
         questionsNavigator.goToNextQuestion();
         let question3 = questionsNavigator.currentQuestion();
         questionsNavigator.goToNextQuestion();
-        let question = questionsNavigator.currentQuestion();
         expect(question1).not.toEqual(question2);
         expect(question2).not.toEqual(question3);
     });
