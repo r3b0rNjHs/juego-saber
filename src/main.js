@@ -22,7 +22,7 @@ function application() {
         nextQuestionButton = document.getElementById('next--question--button');
         nextQuestionButton.addEventListener('click', onNextQuestion);
 
-        getQuestions(function (data) {
+        getNextQuestions(function (data) {
             questions = data;
             theQuestionNavigator = questionsNavigator(questions);
         });
@@ -37,10 +37,9 @@ function application() {
         loadNextQuestion();
     }
     function loadNextQuestion() {
-        theQuestionNavigator.goToNextQuestion();
         resetCountdown();
         if (theQuestionNavigator.areThereNonVisitedQuestions()) {
-            renderQuestion(questionsNavigator.getQuestion());
+            renderQuestion(theQuestionNavigator.getNextQuestion());
         }
         else {
             gameOver();
@@ -49,16 +48,14 @@ function application() {
     function gameOver(){
         hideContainerPanel();
         stopTimer();
-        questionsNavigator.resetQuestions();
+        theQuestionNavigator.resetQuestions();
     }
 
-    //---------------------------------------------------------
-  //  let questionsIndex = -1;
-//-----------------------------------------------------------------------------------------------
     function questionsNavigator (questions){
-        let questionsIndex = -1;
+        let nonVisitedQuestions = true;
+        let questionsIndex = 0;
         function areThereNonVisitedQuestions(){
-            return questionsIndex < questions.length;
+            return nonVisitedQuestions;
         }
         function resetQuestions(){
             questionsIndex = 0;
@@ -66,24 +63,23 @@ function application() {
         function goToNextQuestion(){
             questionsIndex++;
         }
-        function getQuestion() {
-            if(questionsIndex < 0){
-                return questions[0];
-            }
-            if (questionsIndex >= questions.length){
+        function getNextQuestion() {
+            let question = questions[questionsIndex];
+            goToNextQuestion();
+            if (questionsIndex >= questions.length) {
+                nonVisitedQuestions = false;
                 resetQuestions();
             }
-            return questions[questionsIndex];
+            return question;
+
         }
         return {
             areThereNonVisitedQuestions,
             resetQuestions,
-            goToNextQuestion,
-            getQuestion
+            getNextQuestion
         }
     }
 
-    //-------------------------------------------------------------------------------------------------------------
     function startTimer() {
         timerId = setInterval(function(){
             updateCountdown(onNextQuestion, timeChanged);
@@ -110,7 +106,7 @@ function application() {
         }
     }
 
-    function getQuestions(callback) {
+    function getNextQuestions(callback) {
 
         serverData = serverData || [
             {

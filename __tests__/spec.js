@@ -44,25 +44,27 @@ describe("the questions navigator",() => {
         questionsNavigator = application().questionsNavigator(questions);
     });
     it('should test the current question', function () {
-        questionsNavigator.goToNextQuestion();
-        let question = questionsNavigator.getQuestion();
+        let question = questionsNavigator.getNextQuestion();
         expect(questions).toContain(question);
     });
     it('should always be pointing to a question', function () {
 
-        let question = questionsNavigator.getQuestion();
+        let question = questionsNavigator.getNextQuestion();
         expect(questions).toContain(question);
     });
     it('should not repeat the last question', function () {
-        questionsNavigator.goToNextQuestion();
-        let question1 = questionsNavigator.getQuestion();
-        questionsNavigator.goToNextQuestion();
-        let question2 = questionsNavigator.getQuestion();
-        questionsNavigator.goToNextQuestion();
-        let question3 = questionsNavigator.getQuestion();
-        questionsNavigator.goToNextQuestion();
+        let question1 = questionsNavigator.getNextQuestion();
+        let question2 = questionsNavigator.getNextQuestion();
+        let question3 = questionsNavigator.getNextQuestion();
         expect(question1).not.toEqual(question2);
         expect(question2).not.toEqual(question3);
+    });
+
+    it('should knows when the questions are all visited', function () {
+        questionsNavigator.getNextQuestion();
+        expect(questionsNavigator.areThereNonVisitedQuestions()).toBeTruthy();
+        questionsNavigator.getNextQuestion();
+        expect(questionsNavigator.areThereNonVisitedQuestions()).toBeFalsy();
     });
 });
 
@@ -105,7 +107,7 @@ xdescribe("the game", function(){
            .not.toBeNull();
    });
 
-    function getQuestionTitle() {
+    function getNextQuestionTitle() {
         //let questionTitle = document.querySelector('.question--title');
         return document.querySelector('.question--title');
     }
@@ -113,7 +115,7 @@ xdescribe("the game", function(){
     function startGame() {
         let buttonStart = document.getElementById('start--button');
         buttonStart.click();
-        let questionTitle = getQuestionTitle();
+        let questionTitle = getNextQuestionTitle();
         expect(Number(questionTitle.id)).toEqual(questions[0].id);
         return questionTitle;
     }
@@ -130,7 +132,7 @@ xdescribe("the game", function(){
     }
 
     function expectThatSecondQuestionIsRendered() {
-        let questionTitle = getQuestionTitle();
+        let questionTitle = getNextQuestionTitle();
         expect(Number(questionTitle.id)).toEqual(questions[1].id);
     }
 
