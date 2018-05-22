@@ -8,10 +8,9 @@ function application() {
     let questionTitle;
     let questionAnswers;
     let radioAnswersList;
-    //let questionsIndex = -1;
     let timerId;
     let countdown;
-
+    let theQuestionNavigator;
 
     function start(){
         startButton = document.querySelector('.start--button');
@@ -22,8 +21,10 @@ function application() {
         radioAnswersList = document.querySelectorAll('.input-radio');
         nextQuestionButton = document.getElementById('next--question--button');
         nextQuestionButton.addEventListener('click', onNextQuestion);
+
         getQuestions(function (data) {
             questions = data;
+            theQuestionNavigator = questionsNavigator(questions);
         });
     }
 
@@ -36,10 +37,10 @@ function application() {
         loadNextQuestion();
     }
     function loadNextQuestion() {
-        goToNextQuestion();
+        theQuestionNavigator.goToNextQuestion();
         resetCountdown();
-        if (isNotTheEndOfTheGame()) {
-            renderQuestion(currentQuestion());
+        if (theQuestionNavigator.areThereNonVisitedQuestions()) {
+            renderQuestion(questionsNavigator.getQuestion());
         }
         else {
             gameOver();
@@ -48,27 +49,15 @@ function application() {
     function gameOver(){
         hideContainerPanel();
         stopTimer();
-        resetQuestions();
+        questionsNavigator.resetQuestions();
     }
 
     //---------------------------------------------------------
-    let questionsIndex = -1;
-    function isNotTheEndOfTheGame(){
-        return questionsIndex < questions.length;
-    }
-    function resetQuestions(){
-        questionsIndex = 0;
-    }
-    function goToNextQuestion(){
-        questionsIndex++;
-    }
-    function currentQuestion() {
-        return questions[questionsIndex];
-    }
+  //  let questionsIndex = -1;
 //-----------------------------------------------------------------------------------------------
-    let questionsNavigator = function(questions){
+    function questionsNavigator (questions){
         let questionsIndex = -1;
-        function isNotTheEndOfTheGame(){
+        function areThereNonVisitedQuestions(){
             return questionsIndex < questions.length;
         }
         function resetQuestions(){
@@ -77,7 +66,7 @@ function application() {
         function goToNextQuestion(){
             questionsIndex++;
         }
-        function currentQuestion() {
+        function getQuestion() {
             if(questionsIndex < 0){
                 return questions[0];
             }
@@ -87,12 +76,12 @@ function application() {
             return questions[questionsIndex];
         }
         return {
-            isNotTheEndOfTheGame,
+            areThereNonVisitedQuestions,
             resetQuestions,
             goToNextQuestion,
-            currentQuestion
+            getQuestion
         }
-    };
+    }
 
     //-------------------------------------------------------------------------------------------------------------
     function startTimer() {

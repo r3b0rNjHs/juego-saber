@@ -45,21 +45,21 @@ describe("the questions navigator",() => {
     });
     it('should test the current question', function () {
         questionsNavigator.goToNextQuestion();
-        let question = questionsNavigator.currentQuestion();
+        let question = questionsNavigator.getQuestion();
         expect(questions).toContain(question);
     });
     it('should always be pointing to a question', function () {
 
-        let question = questionsNavigator.currentQuestion();
+        let question = questionsNavigator.getQuestion();
         expect(questions).toContain(question);
     });
     it('should not repeat the last question', function () {
         questionsNavigator.goToNextQuestion();
-        let question1 = questionsNavigator.currentQuestion();
+        let question1 = questionsNavigator.getQuestion();
         questionsNavigator.goToNextQuestion();
-        let question2 = questionsNavigator.currentQuestion();
+        let question2 = questionsNavigator.getQuestion();
         questionsNavigator.goToNextQuestion();
-        let question3 = questionsNavigator.currentQuestion();
+        let question3 = questionsNavigator.getQuestion();
         questionsNavigator.goToNextQuestion();
         expect(question1).not.toEqual(question2);
         expect(question2).not.toEqual(question3);
@@ -106,8 +106,8 @@ xdescribe("the game", function(){
    });
 
     function getQuestionTitle() {
-        let questionTitle = document.querySelector('.question--title');
-        return questionTitle;
+        //let questionTitle = document.querySelector('.question--title');
+        return document.querySelector('.question--title');
     }
 
     function startGame() {
