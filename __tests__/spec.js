@@ -17,88 +17,53 @@ function loadTemplate(filepath, onLoad) {
 
 
 describe("the questions navigator",() => {
+    let questions = [
+        {
+            id: 22,
+            title: '¿Cuántos años tiene María?',
+            answers: [
+                {id: 0, answer: '25'},
+                {id: 1, answer: '33'},
+                {id: 2, answer: '37'}
+            ],
+            correctAnswer: {id: 1}
+        },
+        {
+            id: 30,
+            title: '¿Cuál es la capital de Zambia?',
+            answers: [
+                {id: 0, answer: 'Lusaka'},
+                {id: 1, answer: 'Harare'},
+                {id: 2, answer: 'Madrid'}
+            ],
+            correctAnswer: {id: 0}
+        }];
+    let questionsNavigator;
+
+    beforeEach(function () {
+        questionsNavigator = application().questionsNavigator(questions);
+    });
     it('should test the current question', function () {
-        let questions = [
-            {
-                id: 22,
-                title: '¿Cuántos años tiene María?',
-                answers: [
-                    {id: 0, answer: '25'},
-                    {id: 1, answer: '33'},
-                    {id: 2, answer: '37'}
-                ],
-                correctAnswer: {id: 1}
-            },
-            {
-                id: 30,
-                title: '¿Cuál es la capital de Zambia?',
-                answers: [
-                    {id: 0, answer: 'Lusaka'},
-                    {id: 1, answer: 'Harare'},
-                    {id: 2, answer: 'Madrid'}
-                ],
-                correctAnswer: {id: 0}
-            }];
-        const questionNavigator = application().questionsNavigator(questions);
-        questionNavigator.goToNextQuestion();
-        let question = questionNavigator.currentQuestion();
+        questionsNavigator.goToNextQuestion();
+        let question = questionsNavigator.currentQuestion();
         expect(questions).toContain(question);
     });
     it('should always be pointing to a question', function () {
-        let questions = [
-            {
-                id: 22,
-                title: '¿Cuántos años tiene María?',
-                answers: [
-                    {id: 0, answer: '25'},
-                    {id: 1, answer: '33'},
-                    {id: 2, answer: '37'}
-                ],
-                correctAnswer: {id: 1}
-            },
-            {
-                id: 30,
-                title: '¿Cuál es la capital de Zambia?',
-                answers: [
-                    {id: 0, answer: 'Lusaka'},
-                    {id: 1, answer: 'Harare'},
-                    {id: 2, answer: 'Madrid'}
-                ],
-                correctAnswer: {id: 0}
-            }];
-        const questionNavigator = application().questionsNavigator(questions);
-        let question = questionNavigator.currentQuestion();
+
+        let question = questionsNavigator.currentQuestion();
         expect(questions).toContain(question);
     });
-    it('should always be pointing to a question', function () {
-        let questions = [
-            {
-                id: 22,
-                title: '¿Cuántos años tiene María?',
-                answers: [
-                    {id: 0, answer: '25'},
-                    {id: 1, answer: '33'},
-                    {id: 2, answer: '37'}
-                ],
-                correctAnswer: {id: 1}
-            },
-            {
-                id: 30,
-                title: '¿Cuál es la capital de Zambia?',
-                answers: [
-                    {id: 0, answer: 'Lusaka'},
-                    {id: 1, answer: 'Harare'},
-                    {id: 2, answer: 'Madrid'}
-                ],
-                correctAnswer: {id: 0}
-            }];
-        const questionNavigator = application().questionsNavigator(questions);
-        questionNavigator.goToNextQuestion();
-        questionNavigator.goToNextQuestion();
-        questionNavigator.goToNextQuestion();
-        questionNavigator.goToNextQuestion();
-        let question = questionNavigator.currentQuestion();
-        expect(questions).toContain(question);
+    it('should not repeat the last question', function () {
+        questionsNavigator.goToNextQuestion();
+        let question1 = questionsNavigator.currentQuestion();
+        questionsNavigator.goToNextQuestion();
+        let question2 = questionsNavigator.currentQuestion();
+        questionsNavigator.goToNextQuestion();
+        let question3 = questionsNavigator.currentQuestion();
+        questionsNavigator.goToNextQuestion();
+        let question = questionsNavigator.currentQuestion();
+        expect(question1).not.toEqual(question2);
+        expect(question2).not.toEqual(question3);
     });
 });
 

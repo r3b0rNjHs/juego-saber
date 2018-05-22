@@ -65,7 +65,7 @@ function application() {
     function currentQuestion() {
         return questions[questionsIndex];
     }
-
+//-----------------------------------------------------------------------------------------------
     let questionsNavigator = function(questions){
         let questionsIndex = -1;
         function isNotTheEndOfTheGame(){
@@ -94,7 +94,7 @@ function application() {
         }
     };
 
-    //-----------------------------------------
+    //-------------------------------------------------------------------------------------------------------------
     function startTimer() {
         timerId = setInterval(function(){
             updateCountdown(onNextQuestion, timeChanged);
