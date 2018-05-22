@@ -1,4 +1,6 @@
-function application() {
+var saberganar = saberganar || {};
+
+saberganar.game = function(questionsNavigator){
 
     let questions = [];
     let startButton;
@@ -25,6 +27,7 @@ function application() {
         getNextQuestions(function (data) {
             questions = data;
             theQuestionNavigator = questionsNavigator(questions);
+
         });
     }
 
@@ -49,35 +52,6 @@ function application() {
         hideContainerPanel();
         stopTimer();
         theQuestionNavigator.resetQuestions();
-    }
-
-    function questionsNavigator (questions){
-        let nonVisitedQuestions = true;
-        let questionsIndex = 0;
-        function areThereNonVisitedQuestions(){
-            return nonVisitedQuestions;
-        }
-        function resetQuestions(){
-            questionsIndex = 0;
-        }
-        function goToNextQuestion(){
-            questionsIndex++;
-        }
-        function getNextQuestion() {
-            let question = questions[questionsIndex];
-            goToNextQuestion();
-            if (questionsIndex >= questions.length) {
-                nonVisitedQuestions = false;
-                resetQuestions();
-            }
-            return question;
-
-        }
-        return {
-            areThereNonVisitedQuestions,
-            resetQuestions,
-            getNextQuestion
-        }
     }
 
     function startTimer() {
@@ -173,13 +147,9 @@ function application() {
         start,
         setServerData(data){
             serverData = data;
-        },
-        questionsNavigator
-
-
-
+        }
     }
-}
+};
 
 function moduleDefined() {
     return typeof(module) !== 'undefined';
@@ -187,5 +157,5 @@ function moduleDefined() {
 
 // be able to import the file in node
 if (moduleDefined()){
-    module.exports = application;
+    module.exports = saberganar;
 }

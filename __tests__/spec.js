@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const chai = require('chai');
-const application = require('../src/main');
-chai.expect();
+const saberganarGame = require('../src/main');
+const saberganarQuestionNavigator = require('../src/questionsNavigator');
+//const expect = chai.expect();
 
 function loadTemplate(filepath, onLoad) {
     const filePath = path.join(__dirname, filepath);
@@ -41,7 +42,7 @@ describe("the questions navigator",() => {
     let questionsNavigator;
 
     beforeEach(function () {
-        questionsNavigator = application().questionsNavigator(questions);
+        questionsNavigator = saberganarQuestionNavigator.questionsNavigator(questions);
     });
     it('should test the current question', function () {
         let question = questionsNavigator.getNextQuestion();
@@ -68,7 +69,7 @@ describe("the questions navigator",() => {
     });
 });
 
-xdescribe("the game", function(){
+describe("the game", function(){
    let app;
    let questions = [
        {
@@ -94,7 +95,7 @@ xdescribe("the game", function(){
    beforeEach(function(done){
        loadTemplate('../views/body.html', function(text){
            document.body.innerHTML = text;
-           app = application();
+           app = saberganarGame.game(saberganarQuestionNavigator.questionsNavigator);
            app.setServerData(questions);
            app.start();
            done();
@@ -108,7 +109,6 @@ xdescribe("the game", function(){
    });
 
     function getNextQuestionTitle() {
-        //let questionTitle = document.querySelector('.question--title');
         return document.querySelector('.question--title');
     }
 
